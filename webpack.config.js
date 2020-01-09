@@ -1,20 +1,29 @@
-const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { CleanWebpackPlugin }  = require('clean-webpack-plugin');
+const WebpackBar = require('webpackbar');
 
-module.exports = {
-  entry: './src/index.ts',
-  output: {
-    path: __dirname + '/dist',
-    filename: 'server.js',
+const webpackBase = {
+  entry: {
+    server: './src/index.ts'
   },
-  devtool: "inline-source-map",
-  mode: 'development',
+  output: {
+    filename: '[name].js',
+    path: __dirname + '/dist',
+  },
+  mode: 'production',
+  target: 'node',
+  externals: {
+    'express': 'commonjs express'
+  },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
     plugins: [
         new TsconfigPathsPlugin()
     ]
-  },
+  }
+};
+
+const webpackModules = {
   module: {
     rules: [
       {
@@ -27,6 +36,16 @@ module.exports = {
           ]
       }
     ]
-  },
-  target: 'node',
+  }
 };
+
+const webpackPlugins = {
+  plugins: [
+    new CleanWebpackPlugin(),
+    new WebpackBar({
+      name: 'Building API'
+    })
+  ]
+};
+
+module.exports = {...webpackBase, ...webpackModules, ...webpackPlugins};
