@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build-prod": "webpack",
-    "build-dev": "nodemon"
+    "build-dev": "nodemon --inspect "
   },
   "dependencies": {
     "express": "^4.17.1",
